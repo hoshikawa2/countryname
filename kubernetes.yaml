@@ -1,0 +1,57 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: countryname-deployment
+spec:
+  selector:
+    matchLabels:
+      app: countryname
+  replicas: 1 # deployment runs 1 pods matching the template
+  template: # create pods using pod definition in this template
+    metadata:
+      labels:
+        app: countryname
+    spec:
+      containers:
+      - name: countryname
+        image: iad.ocir.io/idavixsf5sbx/cristianohoshikawa/countryname:latest
+        ports:
+        - containerPort: 8082
+      imagePullSecrets:
+      # enter the name of the secret you created
+      - name: ocirsecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: countryname-service
+  labels:
+    app: countryname-service
+spec:
+#  type: LoadBalancer #Exposes the service as a node port.
+#  ports:
+#  - port: 8082
+#    targetPort: 8082
+#
+  selector:
+    app: countryname
+  type: NodePort
+  ports:
+  - port: 8082
+    nodePort: 32334
+#  type: LoadBalancer
+#  ports:
+#  - port: 8082
+#    protocol: TCP
+#    targetPort: 8082
+#  clusterIP: None
+#  ports:
+#    - port: 8082
+#      name: rest
+#    - port: 30682
+#      name: inter-node
+#      targetPort: 30682
+#  ports:
+#  - port: 8082
+#    protocol: TCP
+#    targetPort: 30682
