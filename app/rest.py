@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 import requests
 app = Flask(__name__)
-@app.route('/enviar_dados', methods=['POST'])
+@app.route('/countryname/enviar_dados', methods=['POST'])
 def enviar_dados():    
     body = request.data
 
